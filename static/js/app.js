@@ -63,11 +63,7 @@ let trace1 = {
 
 /////////////////////////////////////////////////
 
-
-
-
-
-key = 0;
+let key = 0;
 for (key in demo_data){
     demo_data[key]
     d3.select("#sample-metadata").append("h5").text(key.concat(":","  ",demo_data[key]));
