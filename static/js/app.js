@@ -1,4 +1,5 @@
 
+// Reading the Data using D3 library to pass it through json 
 d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
 
 
@@ -12,7 +13,7 @@ bubblechart(940, data)
 dinfo(940,data)
 
 
-
+// Printing the data in the console so i can inspect it and test my logic
 console.log(data)
 
 
@@ -44,7 +45,7 @@ function Dropdownlist(){
 });
 
 
-//Defining barchart function
+//Defining barchart function #1
 function barchart(selectedvalue,data){  
 
 //Filtering the data based on user input
@@ -66,26 +67,25 @@ let trace1 = {
 // The data array consists 
 let data_plot = [trace1];
 
-
+// Defining Layout for the samples
 let layout = {
 
   title: "Bargraphs for the samples"
 }
 
-
-// Note that we omitted the layout object this time
-// This will use default parameters for the layout
+// Plotting bar chart 
 Plotly.newPlot("bar", data_plot, layout);
+
 } 
 
 
 
-
+//Defining bubble chart function #2
 function bubblechart(selectedvalue,data){
   let filter_data2=data.samples.filter((sample_values) => sample_values.id==selectedvalue)
-      // Buble Chart inputs
- 
-
+      
+  
+  // Buble Chart inputs
     var trace2 = {
       x: filter_data2[0]["otu_ids"],
       y:filter_data2[0]["sample_values"] ,
@@ -98,10 +98,18 @@ function bubblechart(selectedvalue,data){
       }
     };
     
+    // Defning Layout for bubble chart
+    let layout2 = {
+
+      xaxis: {title: 'OTU IDs'}
+    }
+    
+
+
     var data_buble = [trace2];
     
-  
-    Plotly.newPlot('bubble', data_buble);
+  // Plotting the buble chart under "bubble" HTML id
+    Plotly.newPlot('bubble', data_buble,layout2);
   
 
 
@@ -109,14 +117,18 @@ function bubblechart(selectedvalue,data){
 
 
 
-
+//Defining demo info function #3
 function dinfo(selectedvalue,data){
-
+  
+  // Selecting the drop down button using its "id" in HTML and reseting it every time a new "sample_id" is selected
   d3.select("#sample-metadata").selectAll("h5").remove();
 
+  // Filtering the metadata based on the secleted value from user
   let filter_data2=data.metadata.filter((metadata) => metadata.id==selectedvalue)
+  // Testing the output in the console 
   console.log(filter_data2)
 
+  // Running for loop to append the demo layer in HTML and print it based on selected id 
   let key = 0;
   for (key in filter_data2[0]){
 
@@ -127,13 +139,13 @@ function dinfo(selectedvalue,data){
 
 }
 
-
+// Calling existing "optionChanged" function from HTML class to pass selected value through all my 3 functions (bubble,bar and dinfo functions)
 function optionChanged(selectedvalue){
   console.log(selectedvalue)
 
   d3.json("https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json").then((data) => {
 
-
+// Passing user selected value from the drop down and the data through each function to populate the graphs dynamically 
  barchart(selectedvalue, data)
  bubblechart(selectedvalue, data)
  dinfo(selectedvalue,data)
